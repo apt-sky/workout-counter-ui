@@ -74,10 +74,8 @@
 }
 
 #div1 {
-    width: 33%;
     height: 200px;
     box-sizing: border-box;
-    float: left;
 }
 
 .selectedRadial {
