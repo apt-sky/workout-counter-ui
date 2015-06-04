@@ -18,10 +18,15 @@ angular.module('workoutCounterUiApp')
 
         $scope.getAllCounters = function() {
 
-            $http({method: 'GET', url: workoutCounterServiceUrl + 'counters', withCredentials: false})
+            $scope.counters = [];
+            $http({method: 'GET', url: workoutCounterServiceUrl + 'counters?fields=name', withCredentials: false})
                 .success(function(response){
-                    console.log('Retreived all counters: ' + util.inspect(response, false, null));
-                    $scope.counters = response;
+                    console.log('Retreived all counters');
+
+                    angular.forEach(response, function(counter){
+                        console.log(counter);
+                        $scope.counters.push(counter.name);
+                    })
                 })
                 .error(function(error){
                     console.log('Error retreiving all counters: ' + error);
@@ -44,6 +49,7 @@ angular.module('workoutCounterUiApp')
         }
 
         renderRadialProgress();
+        $scope.getAllCounters();
 
 
         /* Modal Code */
@@ -56,8 +62,19 @@ angular.module('workoutCounterUiApp')
                 size: 'sm'
             });
 
-            modalInstance.result.then(function(modalX){
-                console.log(modalX);
+            modalInstance.result.then(function(modalInput){
+
+                $http({method: 'POST', url: workoutCounterServiceUrl + 'counters/', data: modalInput, withCredentials: false})
+                    .success(function () {
+                        console.log('Successfully added Counter: ');
+                        console.log(modalInput);
+                        $scope.result = 'Success! :)';
+                        $scope.getAllCounters();
+                    })
+                    .error(function (error) {
+                        console.log('Error adding Counter name: %s with error: %j', modalInput.name, error);
+                        $scope.result = 'Failure :(';
+                    });
             }, function() {
                 $log.info('Modal dismissed at: ' + new Date());
             });
