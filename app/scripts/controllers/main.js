@@ -47,49 +47,35 @@ angular.module('workoutCounterUiApp')
 
 
         /* Modal Code */
-        $scope.animationsEnabled = true;
-        $scope.items = ['item1', 'item2', 'item3']
-
         $scope.open = function() {
 
             var modalInstance = $modal.open({
-                animation: $scope.animationsEnabled,
+                animation: true,
                 templateUrl: 'myModalContent.html',
                 controller: 'ModalInstanceCtrl',
-                size: 'sm',
-                resolve: {
-                    items: function() {
-                        return $scope.items;
-                    }
-                }
+                size: 'sm'
             });
 
-            modalInstance.result.then(function(selectedItem){
-                $scope.selected = selectedItem;
+            modalInstance.result.then(function(modalX){
+                console.log(modalX);
             }, function() {
                 $log.info('Modal dismissed at: ' + new Date());
             });
         }
 
-        $scope.toggleAnimation = function () {
-            $scope.animationsEnabled = !$scope.animationsEnabled;
-        };
-
     });
 
 angular.module('workoutCounterUiApp')
-    .controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
+    .controller('ModalInstanceCtrl', function ($scope, $modalInstance) {
 
-    $scope.items = items;
-    $scope.selected = {
-        item: $scope.items[0]
-    };
+        $scope.ok = function () {
+            $modalInstance.close({
+                name: $scope.counterName,
+                goal: $scope.counterGoal
+            });
+        };
 
-    $scope.ok = function () {
-        $modalInstance.close($scope.selected.item);
-    };
-
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel');
-    };
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
 });
