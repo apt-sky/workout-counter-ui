@@ -2,7 +2,7 @@
 
     <form name="mainForm" class="col-md-12">
 
-        <select class="select-box form-control" data-style="btn-primary" ng-model="counter" ng-options="counter for counter in counters" />
+        <select class="select-box form-control" data-style="btn-primary" ng-model="counter" ng-change="renderRadialProgress()" ng-options="counter for counter in counters" />
 
         <script type="text/ng-template" id="myModalContent.html">
             <div class="modal-header">

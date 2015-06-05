@@ -37,17 +37,33 @@ angular.module('workoutCounterUiApp')
         $scope.getCounterValues = function() {};
 
 
-        function renderRadialProgress() {
+        $scope.renderRadialProgress = function() {
 
-            var div1 = d3.select(document.getElementById('div1'));
-            radialProgress(document.getElementById('div1'))
-                .label('RADIAL 1')
-                .diameter(150)
-                .value(78)
-                .render();
+            $scope.percentage = 0;
+
+            if ($scope.counter) {
+                $http({method: 'GET', url: workoutCounterServiceUrl + 'counters/' + $scope.counter, withCredentials: false})
+                    .success(function(response){
+                        console.log('Successfully retreieved counter:');
+                        console.log(response);
+                        $scope.percentage = response[0].count / response[0].goal * 100;
+                        console.log($scope.percentage)
+
+                        var div1 = d3.select(document.getElementById('div1'));
+                        radialProgress(document.getElementById('div1'))
+                            .label('RADIAL 1')
+                            .diameter(150)
+                            .value(Math.round($scope.percentage))
+                            .render();
+
+                    })
+                    .error(function(error){
+                        console.log('Failed retreiving counter with error:' + error);
+                    });
+            }
         }
 
-        renderRadialProgress();
+        $scope.renderRadialProgress();
         $scope.getAllCounters();
 
 
@@ -122,7 +138,8 @@ angular.module('workoutCounterUiApp')
         $scope.ok = function () {
             $modalInstance.close({
                 name: $scope.counterName,
-                goal: $scope.counterGoal
+                goal: $scope.counterGoal,
+                count: 0
             });
         };
 
