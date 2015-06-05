@@ -14,7 +14,6 @@ angular.module('workoutCounterUiApp')
 
         $scope.counters = [];
         $scope.counter = $scope.counters[0];
-        $scope.counterValue = 1;
 
         $scope.getAllCounters = function() {
 
@@ -98,6 +97,23 @@ angular.module('workoutCounterUiApp')
             });
         }
 
+
+        $scope.incrementCounter = function() {
+
+            var count = 1;
+            console.log(count);
+            if ($scope.counterValue) {
+                count = parseInt($scope.counterValue) ;
+            }
+
+            $http({method: 'PUT', url: workoutCounterServiceUrl + 'counters/' + $scope.counter, data: {"count": count}, withCredentials: false})
+                .success(function(){
+                    console.log('Successfully updated counter with count:' + count);
+                })
+                .error(function(error){
+                    console.log('Error updating counter');
+                });
+        }
     });
 
 angular.module('workoutCounterUiApp')
