@@ -52,6 +52,24 @@ angular.module('workoutCounterUiApp')
         $scope.getAllCounters();
 
 
+        $scope.remove = function() {
+
+            if($scope.counter) {
+                $http({method: 'DELETE', url: workoutCounterServiceUrl + 'counters/' + $scope.counter})
+                    .success(function(){
+                        console.log('Successfully deleted counter: ' + $scope.counter);
+                        $scope.getAllCounters();
+                        $scope.counter = undefined;
+                    })
+                    .error(function(){
+                        console.log('Error deleting counter: ' + $scope.counter);
+                    });
+            } else {
+                console.log('No selection made, nothing to delete');
+            }
+        }
+
+
         /* Modal Code */
         $scope.open = function() {
 
